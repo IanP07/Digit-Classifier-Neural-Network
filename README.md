@@ -1,4 +1,5 @@
-<a href="numberclassifier.netlify.app" target="_blank" rel="noopener noreferrer">Number Classifier Demo</a>
+[Number Classifier AI Demo](numberclassifier.netlify.app)
+
 
 Convolutional Neural Network made in Pytorch trained on MNIST Dataset. Backend made with FastAPI and hosted on [Render](https://render.com/), frontend hosted on [Netlify](https://www.netlify.com/). 
 
