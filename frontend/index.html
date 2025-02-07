@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digit Recognizer AI</title>
+    <style>
+        body { text-align: center; font-family: monospace, sans-serif; background: white;}
+        canvas { border: 2px solid black; background-color: white; }
+        button { margin: 10px; padding: 10px; font-size: 16px;}
+        a {text-decoration: none; color: #55d2d2}
+        .canvas { max-width: fit-content; margin-left: auto; margin-right: auto;}
+        .buttons { max-width: fit-content; margin-left: auto; margin-right: auto;}
+        .github-icon {margin: 10px;}
+        .button {transition-duration: 0.4s; border: 2px solid #55d2d2; color: black; padding: 15px 32px; text-align: center; text-decoration: none; display: inline-block; font-size: 20px; font-family: monospace;}
+        .button:hover { background-color: #55d2d2; color: white; }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+ <h1>Draw a Digit (0-9)</h1>
+ <h2>(Make sure it fills the entire box)</h2>
+
+    <div class="canvas">
+        <canvas id="canvas" width="280" height="280"></canvas>
+    </div>
+<!--    <br>-->
+    <div class="buttons">
+        <a href="https://github.com/IanP07" target="_blank" class="fa fa-github github icon" style="font-size:48px; padding-top:10px; display:inline-block;"></a>
+        <button class="button" onclick="clearCanvas()">Clear</button>
+        <button class="button" onclick="predictDigit()">Predict</button>
+    </div>
+    <h2 id="result"></h2>
+
+
+    <script>
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");   // Allows for drawing on the canvas
+        let drawing = false;
+
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        canvas.addEventListener("mousedown", () => drawing = true);
+        canvas.addEventListener("mouseup", () => drawing = false);
+        canvas.addEventListener("mousemove", draw);
+
+        function draw(event) {
+            if (!drawing) return;
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(event.offsetX, event.offsetY, 7, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            document.getElementById("result").innerText = "";
+        }
+
+       function predictDigit() {
+    // Create a hidden 28x28 canvas
+    const smallCanvas = document.createElement("canvas");
+    smallCanvas.width = 28;
+    smallCanvas.height = 28;
+    const smallCtx = smallCanvas.getContext("2d");
+
+    // Scale down the drawing
+    smallCtx.drawImage(canvas, 0, 0, 28, 28);
+
+    // Get image data (pixel values)
+    let imageData = smallCtx.getImageData(0, 0, 28, 28);
+    let pixels = imageData.data;
+
+    // Invert colors: swap black and white
+    for (let i = 0; i < pixels.length; i += 4) {
+        pixels[i] = 255 - pixels[i];     // Swaps red channel
+        pixels[i + 1] = 255 - pixels[i + 1]; // Swaps green channel
+        pixels[i + 2] = 255 - pixels[i + 2]; // Swaps blue channel
+    }
+
+    // Put the modified pixels back onto the canvas
+    smallCtx.putImageData(imageData, 0, 0);
+
+    // Convert to data URL and blob
+    const imgData = smallCanvas.toDataURL("image/png");
+    const blob = dataURItoBlob(imgData);
+    const formData = new FormData();
+    formData.append("file", blob, "digit.png");
+    document.body.appendChild(smallCanvas);
+
+
+    // Calls backend
+    fetch("https://fastapi-nn-backend.onrender.com/predict", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Server response:", data);
+        document.getElementById("result").innerText = "Prediction: " + data.prediction;
+    })
+    .catch(error => console.error("Fetch error:", error));
+  }
+
+
+    function dataURItoBlob(dataURI) {
+        let byteString = atob(dataURI.split(",")[1]);
+        let arrayBuffer = new ArrayBuffer(byteString.length);
+        let intArray = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < byteString.length; i++) {
+            intArray[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([intArray], { type: "image/png" });
+    }
+    </script>
+</body>
+</html>
