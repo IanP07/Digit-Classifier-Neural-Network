@@ -104,8 +104,14 @@
         document.getElementById("result").innerText = "Prediction: " + data.prediction;
     })
     .catch(error => console.error("Fetch error:", error));
-  }
+   }
 
+   // Keeps backend alive
+   setInterval(() => {
+    fetch("https://fastapi-nn-backend.onrender.com/keep-alive", { method: "POST" })
+    .then(response => console.log("Backend kept alive:", response.status))
+    .catch(error => console.error("Error keeping backend alive:", error));
+    }, 600000); // Calls backend every 10 minutes
 
     function dataURItoBlob(dataURI) {
         let byteString = atob(dataURI.split(",")[1]);
