@@ -146,7 +146,7 @@
     }
 
     setInterval(() => { // Calls 'keep-alive' endpoint every 5 minutes to keep render backend alive
-        fetch("https://your-backend.onrender.com/keep-alive", { method: "POST" })
+        fetch("https://fastapi-nn-backend.onrender.com/keep-alive", { method: "POST" })
         .then(response => console.log("Backend kept alive:", response.status))
         .catch(error => console.error("Error keeping backend alive:", error));
     }, 300000); 
