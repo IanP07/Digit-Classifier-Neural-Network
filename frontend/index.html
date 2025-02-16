@@ -106,34 +106,6 @@
     .catch(error => console.error("Fetch error:", error));
    }
 
-   // Keeps backend alive
-   setInterval(() => {
-
-    console.log("TEST");
-    // const smallCanvas = document.createElement("canvas");
-    // smallCanvas.width = 28;
-    // smallCanvas.height = 28;
-    // const smallCtx = smallCanvas.getContext("2d");
-       
-    // smallCtx.fillStyle = "white";
-    // smallCtx.fillRect(0, 0, 28, 28);
-
-    // const imgData = smallCanvas.toDataURL("image/png");
-    // const blob = dataURItoBlob(imgData);
-    // const formData = new FormData();
-    // formData.append("file", blob, "keep_alive.png");
-
-    //  // Call the prediction endpoint with a blank image
-    // fetch("https://fastapi-nn-backend.onrender.com/predict", {
-    //     method: "POST",
-    //     body: formData
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log("Keep-alive prediction response:", data))
-    // .catch(error => console.error("Error keeping backend alive:", error));
-       
-    }, 600000); // Calls backend every 10 minutes
-        
 
     function dataURItoBlob(dataURI) {
         let byteString = atob(dataURI.split(",")[1]);
