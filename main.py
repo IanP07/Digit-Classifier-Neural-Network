@@ -11,6 +11,13 @@ from fastapi.middleware.cors import CORSMiddleware
 # Define the FastAPI app
 app = FastAPI()
 
+# Allow frontend to access the backend
+origins = [
+    "https://numberclassifier.netlify.app", 
+    "http://localhost:3000", 
+]
+
+
 # Allows 405 methods
 app.add_middleware(
     CORSMiddleware,
