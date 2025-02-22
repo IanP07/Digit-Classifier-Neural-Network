@@ -81,6 +81,10 @@ async def predict(file: UploadFile):
 async def keep_alive():
     return {"status": "alive"}
 
+@app.get("/keep-alive")
+async def get_keep_alive():
+    return {"status": "alive"}
+
 # Run the server
 if __name__ == "__main__":
     import uvicorn
