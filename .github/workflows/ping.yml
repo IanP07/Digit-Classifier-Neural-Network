@@ -1,0 +1,12 @@
+name: Ping Render Backend
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"  # Runs every 10 minutes
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render URL
+        run: curl -fsS https://fastapi-nn-backend.onrender.com/keep-alive
