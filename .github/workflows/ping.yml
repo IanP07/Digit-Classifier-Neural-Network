@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Render URL
-        run: curl -fsS https://fastapi-nn-backend.onrender.com/keep-alive
+        run: curl -kfsS https://fastapi-nn-backend.onrender.com/keep-alive
