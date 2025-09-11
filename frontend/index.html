@@ -94,7 +94,7 @@
 
 
     // Calls backend
-    fetch("https://fastapi-nn-backend.onrender.com/predict", {
+    fetch("https://digit-classifier-neural-network-production.up.railway.app/predict", {
         method: "POST",
         body: formData
     })
@@ -117,8 +117,8 @@
         return new Blob([intArray], { type: "image/png" });
     }
 
-    setInterval(() => { // Calls 'keep-alive' endpoint every 5 minutes to keep render backend alive
-        fetch("https://fastapi-nn-backend.onrender.com/keep-alive", { method: "POST" })
+    setInterval(() => { // Calls 'keep-alive' endpoint every 5 minutes to keep railway backend alive
+        fetch("https://digit-classifier-neural-network-production.up.railway.app/keep-alive", { method: "POST" })
         .then(response => console.log("Backend kept alive:", response.status))
         .catch(error => console.error("Error keeping backend alive:", error));
     }, 300000); 
